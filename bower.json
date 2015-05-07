@@ -6,7 +6,7 @@
     "Finn Michael <finn.michael.halvorsen@helse-vest-ikt.no>"
   ],
   "description": "Custom angular validator for norwegian social security numbers",
-  "main": "norwegianidnumber.js",
+  "main": "./norwegianidnumber.js",
   "license": "MIT",
   "ignore": [
     "**/.*",

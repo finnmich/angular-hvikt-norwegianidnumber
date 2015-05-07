@@ -15,3 +15,10 @@ Add "allowspacesinid" to allow spaces in the id. The value in the model will hav
   </div>  
 </form>
 ```
+
+###To set up environment for testing
+```
+	npm install karma karma-jasmine karma-phantomjs-launcher --save-dev
+	bower update
+	karma start
+```

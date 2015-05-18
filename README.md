@@ -1,6 +1,8 @@
 # angular-hvikt-norwegianidnumber
 Custom angular.js directive for validating norwegian social security numbers.
 Add "allowspacesinid" to allow spaces in the id. The value in the model will have the spaces removed.
+Add "checkdates" to check if the dates are valid (Will still accept D-, H- and FH-numbers)
+
 
 ###Example usage:
 ```

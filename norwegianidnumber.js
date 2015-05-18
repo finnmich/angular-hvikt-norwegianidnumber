@@ -23,6 +23,33 @@ angular.module('hvikt.norwegianidnumber-validator', [])
         for (var index = 0; index < fnrArray.length; index++) {
           fnrArray[index] = parseInt(fnrArray[index],10);          
         }
+        //Check for valid date
+        if (attrs.checkdate !== undefined && attrs.checkdate !== 'false') {
+          if (fnrArray[0] > 7) {
+            //FH-number - rest of number is not a date if first digit is 8 or 9
+          } 
+          else {
+            if (fnrArray[0] > 3) {
+              //D-number - first digit has 4 added to it. (First digit - 4)* 10 + Second digit must not exceed 31, Third*10 + Fourth must not exceed 12.              
+              if (((fnrArray[0]-4))*10 + fnrArray[1] > 31 || (fnrArray[2]*10)+fnrArray[3] > 12) {
+                return false;
+              }
+            }
+            else if (fnrArray[2] > 4) {
+              //H-number - third digit has 4 added to it. First digit*10 + Second digit must not exceed 31. (Third digit-4)*10 + Fourth digit must not exceed 12.
+              if ((fnrArray[0]*10)+fnrArray[1] > 31 || (fnrArray[2]-4)*10 + fnrArray[3] > 0) {
+                return false;
+              }
+            }
+            else {
+              //Normal F-number. Check for date
+              if ((fnrArray[0]*10)+fnrArray[1] > 31 || (fnrArray[2]*10)+fnrArray[3] > 12) {
+                return false;
+              }
+            }
+          }
+        }
+        
         //Calculate checknumber 1 (k1)
         //k1 = 11 - ((3 × d1 + 7 × d2 + 6 × m1 + 1 × m2 + 8 × å1 + 9 × å2 + 4 × i1 + 5 × i2 + 2 × i3) mod 11)
         var k1 = 11 - ((3 * fnrArray[0] + 7 * fnrArray[1] + 6 * fnrArray[2] + 1 * fnrArray[3] + 8 * fnrArray[4] + 9 * fnrArray[5] + 4 * fnrArray[6] + 5 * fnrArray[7] + 2 * fnrArray[8]) % 11);

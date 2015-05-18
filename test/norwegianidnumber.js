@@ -133,6 +133,11 @@ describe('Directive: norwegianidnumber', function () {
     '03117000205'
   ];
   
+  var inValidDateValidChecksum = [
+    '12345678911',
+    '22222212301'
+  ];
+  
   var testActorsWithSpaces = [
     '15 076 50   0565',
     '21 01 640 0952',
@@ -220,6 +225,17 @@ describe('Directive: norwegianidnumber', function () {
         expect(form.someid.$valid).toBe(false);
       }
     });
+    
+    it('should return true even if date is incorrect with checkdate disabled', function(){
+      var index;
+      for (index = 0; index < inValidDateValidChecksum.length; index++) {
+        var element = inValidDateValidChecksum[index];
+        form.someid.$setViewValue(element);
+        scope.$digest();
+        expect(scope.model.someid).toBe(element);
+        expect(form.someid.$valid).toBe(true);
+      }
+    });
   });
   
   describe('with allow spaces', function(){
@@ -249,4 +265,49 @@ describe('Directive: norwegianidnumber', function () {
       }
     });
   });
+  
+  describe('with check date enabled', function(){
+    // Initialize mock scope and element
+    beforeEach(inject(function ($compile, $rootScope) {
+      scope = $rootScope.$new();
+      var element = angular.element(
+        '<form name="form">' +
+        '<input type="text" ng-model="model.someid" name="someid" norwegianidnumber checkdate />' +
+        '</form>'
+      );
+  
+    	scope.model = { someid : null };
+    	$compile(element)(scope);
+    	form = scope.form;
+    }));
+    
+    it('should return false if date is incorrect', function(){
+      var index;
+      for (index = 0; index < inValidDateValidChecksum.length; index++) {
+        var element = inValidDateValidChecksum[index];
+        form.someid.$setViewValue(element);
+        scope.$digest();
+        expect(form.someid.$valid).toBe(false);
+      }
+    });
+    
+    it('should still accept D-numbers, H-numbers and FH-numbers', function(){
+      var index;
+      var element;
+      for (index = 0; index < validFnrList.length; index++) {
+        element = validFnrList[index];
+        form.someid.$setViewValue(element);
+        scope.$digest();
+        expect(scope.model.someid).toBe(element);
+        expect(form.someid.$valid).toBe(true);
+      }
+      for (index = 0; index < testActors.length; index++) {
+        element = testActors[index];
+        form.someid.$setViewValue(element);
+        scope.$digest();
+        expect(scope.model.someid).toBe(element);
+        expect(form.someid.$valid).toBe(true);
+      }
+    });
+  });  
 });
